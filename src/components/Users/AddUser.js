@@ -5,18 +5,42 @@ import Button from "../UI/Button";
 import styles from "./AddUser.module.css";
 
 const AddUser = (props) => {
-  let [userName, setUserName] = useState("");
-  let [age, setAge] = useState("");
+  const [enteredUserName, setEnteredUserName] = useState("");
+  const [enteredAge, setEnteredAge] = useState("");
 
+  // onChange event handlers
+  const userNameChangeHandler = (e) => {
+    setEnteredUserName(e.target.value);
+  };
+  const ageChangeHandler = (e) => {
+    setEnteredAge(e.target.value);
+  };
+
+  // onSubmit event handler =>
   const addUserHandler = (event) => {
+    // Prevent page from refreshing upon submit evnt fired
     event.preventDefault();
 
+    // Gatekeeping function to bar submitting empty data
+    if (enteredUserName === "" || enteredAge === "") {
+      return console.log("Fill up up the inputs");
+    } else if (parseInt(enteredAge) < 1) {
+      return console.log("Invalid age");
+    }
+
+    // Storing user input data into an object
     const data = {
-      userName: setUserName(event.target.value),
-      age: setAge(event.target.value),
+      userName: enteredUserName,
+      age: enteredAge,
     };
+
     console.log(data);
+
+    // Garbage collection section => Emptying inputs after data collected
+    setEnteredUserName("");
+    setEnteredAge("");
   };
+
   /* 
     className can be renamed anything like classes or styles, and passed down into child Card component and access there using 
     props."whatever key name you set here on props", but im choosing className just to be semanctically correct
@@ -28,11 +52,16 @@ const AddUser = (props) => {
         <input
           type="text"
           id="username"
-          onChange={addUserHandler}
-          value={userName}
+          onChange={userNameChangeHandler}
+          value={enteredUserName}
         />
         <label htmlFor="age">Age (Years)</label>
-        <input type="number" id="age" onChange={addUserHandler} value={age} />
+        <input
+          type="number"
+          id="age"
+          onChange={ageChangeHandler}
+          value={enteredAge}
+        />
         <Button type="submit">Add User</Button>
       </form>
     </Card>
