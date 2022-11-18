@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Card from "../UI/Card";
+import styles from "./AddUser.module.css";
 
 const AddUser = (props) => {
   let [userName, setUserName] = useState("");
@@ -14,9 +15,12 @@ const AddUser = (props) => {
     };
     console.log(data);
   };
-
+  /* 
+    className can be renamed anything like classes or styles, and passed down into child Card component and access there using 
+    props."whatever key name you set here on props", but im choosing className just to be semanctically correct
+  */
   return (
-    <Card>
+    <Card className={styles.input}>
       <form onSubmit={addUserHandler}>
         <label htmlFor="username">Username</label>
         <input
