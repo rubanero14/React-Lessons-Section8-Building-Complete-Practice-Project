@@ -38,13 +38,8 @@ const AddUser = (props) => {
       return console.log(inputValid, errorMessage);
     }
 
-    // Storing user input data into an object
-    const data = {
-      userName: enteredUserName,
-      age: enteredAge,
-    };
-
-    console.log(data);
+    // Sending new user data using props function to parent component to update new list or array of users whenever add use button is clicked
+    props.onAddUser(enteredUserName, enteredAge);
 
     // Garbage collection section => Emptying inputs after data collected
     setEnteredUserName("");
