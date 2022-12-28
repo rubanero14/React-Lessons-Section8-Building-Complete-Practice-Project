@@ -8,8 +8,11 @@ import styles from "./AddUser.module.css";
 const AddUser = (props) => {
   const [enteredUserName, setEnteredUserName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
-  const [inputValid, setInputValid] = useState(true);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [inputValid, setInputValid] = useState({
+    title: "",
+    message: "",
+    error: false,
+  });
 
   // onChange event handlers
   const userNameChangeHandler = (e) => {
@@ -21,22 +24,24 @@ const AddUser = (props) => {
 
   // onSubmit event handler =>
   const addUserHandler = (event) => {
-    // Resetting validation
-    setInputValid(false);
-    setErrorMessage("");
-
     // Prevent page from refreshing upon submit evnt fired
     event.preventDefault();
 
     // Gatekeeping function to bar submitting empty data
     if (enteredUserName.trim().length === 0 || enteredAge.trim().length === 0) {
-      setInputValid(false);
-      setErrorMessage("Fill up up the inputs!");
-      return console.log(inputValid, errorMessage);
-    } else if (+enteredAge < 1) {
-      setInputValid(false);
-      setErrorMessage("Invalid age!");
-      return console.log(inputValid, errorMessage);
+      return setInputValid({
+        title: "Invalid input!",
+        message: "Please fill up the inputs and dont leave them empty.",
+        error: true,
+      });
+    }
+
+    if (+enteredAge < 1) {
+      return setInputValid({
+        title: "Invalid age!",
+        message: "Please input valid age.",
+        error: true,
+      });
     }
 
     // Sending new user data using props function to parent component to update new list or array of users whenever add use button is clicked
@@ -47,13 +52,39 @@ const AddUser = (props) => {
     setEnteredAge("");
   };
 
+  // Close modal
+  const closeModal = () => {
+    setInputValid({
+      title: "",
+      message: "",
+      error: false,
+    });
+  };
+
   /* 
     className can be renamed anything like classes or styles, and passed down into child Card component and access there using 
     props."whatever key name you set here on props", but im choosing className just to be semanctically correct
   */
   return (
     <div>
-      <ErrorModal title="An error occured!" message={errorMessage} />
+      {
+        // This is how to render conditionally using JSX without need to use css display method
+        /* 
+          inputValid.error && (
+          <ErrorModal
+            showModal={inputValid.error}
+            closeModal={closeModal}
+            title={inputValid.title}
+            message={inputValid.message}
+          />)
+      */
+      }
+      <ErrorModal
+        showModal={inputValid.error}
+        closeModal={closeModal}
+        title={inputValid.title}
+        message={inputValid.message}
+      />
       <Card className={styles.input}>
         <form onSubmit={addUserHandler}>
           <label htmlFor="username">Username</label>
@@ -75,9 +106,9 @@ const AddUser = (props) => {
           </Button>
           <p
             className={styles.alert}
-            style={{ display: inputValid ? "none" : "block" }}
+            style={{ display: inputValid ? "block" : "none" }}
           >
-            {errorMessage}
+            {inputValid.message}
           </p>
         </form>
       </Card>
