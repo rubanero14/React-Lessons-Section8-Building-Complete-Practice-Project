@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
+import ErrorModal from "../UI/ErrorModal";
 
 import styles from "./AddUser.module.css";
 
@@ -51,33 +52,36 @@ const AddUser = (props) => {
     props."whatever key name you set here on props", but im choosing className just to be semanctically correct
   */
   return (
-    <Card className={styles.input}>
-      <form onSubmit={addUserHandler}>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          onChange={userNameChangeHandler}
-          value={enteredUserName}
-        />
-        <label htmlFor="age">Age (Years)</label>
-        <input
-          type="number"
-          id="age"
-          onChange={ageChangeHandler}
-          value={enteredAge}
-        />
-        <Button type="submit" style={{ marginBotttom: "10px" }}>
-          Add User
-        </Button>
-        <p
-          className={styles.alert}
-          style={{ display: inputValid ? "none" : "block" }}
-        >
-          {errorMessage}
-        </p>
-      </form>
-    </Card>
+    <div>
+      <ErrorModal title="An error occured!" message={errorMessage} />
+      <Card className={styles.input}>
+        <form onSubmit={addUserHandler}>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            onChange={userNameChangeHandler}
+            value={enteredUserName}
+          />
+          <label htmlFor="age">Age (Years)</label>
+          <input
+            type="number"
+            id="age"
+            onChange={ageChangeHandler}
+            value={enteredAge}
+          />
+          <Button type="submit" style={{ marginBotttom: "10px" }}>
+            Add User
+          </Button>
+          <p
+            className={styles.alert}
+            style={{ display: inputValid ? "none" : "block" }}
+          >
+            {errorMessage}
+          </p>
+        </form>
+      </Card>
+    </div>
   );
 };
 
