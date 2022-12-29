@@ -8,7 +8,7 @@ import styles from "./AddUser.module.css";
 const AddUser = (props) => {
   const [enteredUserName, setEnteredUserName] = useState("");
   const [enteredAge, setEnteredAge] = useState("");
-  const [inputValid, setInputValid] = useState({
+  const [error, setError] = useState({
     title: "",
     message: "",
     error: false,
@@ -29,7 +29,7 @@ const AddUser = (props) => {
 
     // Gatekeeping function to bar submitting empty data
     if (enteredUserName.trim().length === 0 || enteredAge.trim().length === 0) {
-      return setInputValid({
+      return setError({
         title: "Invalid input!",
         message: "Please fill up the inputs and dont leave them empty.",
         error: true,
@@ -37,7 +37,7 @@ const AddUser = (props) => {
     }
 
     if (+enteredAge < 1) {
-      return setInputValid({
+      return setError({
         title: "Invalid age!",
         message: "Please input valid age.",
         error: true,
@@ -54,7 +54,7 @@ const AddUser = (props) => {
 
   // Close modal
   const closeModal = () => {
-    setInputValid({
+    setError({
       title: "",
       message: "",
       error: false,
@@ -70,20 +70,19 @@ const AddUser = (props) => {
       {
         // This is how to render conditionally using JSX without need to use css display method
         /* 
-          inputValid.error && (
+          error.error && (
           <ErrorModal
-            showModal={inputValid.error}
             closeModal={closeModal}
-            title={inputValid.title}
-            message={inputValid.message}
+            title={error.title}
+            message={error.message}
           />)
       */
       }
       <ErrorModal
-        showModal={inputValid.error}
+        showModal={error.error}
         closeModal={closeModal}
-        title={inputValid.title}
-        message={inputValid.message}
+        title={error.title}
+        message={error.message}
       />
       <Card className={styles.input}>
         <form onSubmit={addUserHandler}>
@@ -106,9 +105,9 @@ const AddUser = (props) => {
           </Button>
           <p
             className={styles.alert}
-            style={{ display: inputValid ? "block" : "none" }}
+            style={{ display: error.error ? "block" : "none" }}
           >
-            {inputValid.message}
+            {error.message}
           </p>
         </form>
       </Card>
